@@ -14,7 +14,7 @@ class YoutubeCommentsExtractor:
     def comment_extraction_settings_method(self, output_path: str, videos_list: list[str]):
         self.output_path = output_path.format(self.current_date)
         self.videos_list = videos_list
-        self.youtube_api = build(self.service_name, self.api_version, developerKey = "AIzaSyA-qAgswGE-1gbhaTXTnteCTbr6MtvvDh4")
+        self.youtube_api = build(self.service_name, self.api_version, developerKey = os.getenv("YOUTUBE_API_KEY"))
         os.makedirs(output_path.format(self.current_date), exist_ok = True)
     
         self.youtube_data_dictionary = {
