@@ -108,7 +108,7 @@ class YoutubeCommentsExtractor:
                     break
 
     def save_output_data(self):
-        output_data = pd.DataFrame(self.youtube_data_dictionary)
+        output_data = pd.DataFrame(self.youtube_data_dictionary).drop_duplicates(subset = ["comment_date", "commentor_name", "comment_id", "comment_text"])
         output_data.to_excel(os.path.join(self.output_path, f"{self.current_date} Youtube Comments Data.xlsx"), index = False)
 
 if (__name__ == "__main__"):
