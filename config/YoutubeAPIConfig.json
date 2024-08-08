@@ -1,0 +1,49 @@
+{
+    "YoutubeAPI" : {
+        "constructor" : {
+            "service_name" : "youtube",
+            "api_ver"      : "v3"
+        },
+        "youtube_api_settings_method" : {
+            "output_path"   : "",
+            "earliest_date" : "2023-07-01",
+            "latest_date"   : "2024-06-30",
+            "max_results"   : 10,
+            "brand_names"   : [],
+            "channel_names" : [],
+            "channel_ids"   : []
+        }
+    },
+    "YoutubeAnalyticsInterface" : {
+        "constructor" : {
+            "service_name" : "youtubeAnalytics",
+            "api_version"  : "v2",
+            "api_scope"    : ["https://www.googleapis.com/auth/yt-analytics.readonly"]
+        },
+        "analytics_settings_method" : {
+            "video_id_file"         : "",
+            "video_id_column"       : "",
+            "brand_column"          : "",
+            "output_file_name"      : "",
+            "start_date"            : "2023-07-01",
+            "end_date"              : "2024-06-30",
+            "metrics_string"        : "views,comments,likes,dislikes,shares,subscribersGained,subscribersLost,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,annotationClickThroughRate,annotationCloseRate,annotationImpressions,annotationClickableImpressions,annotationClosableImpressions,annotationClicks,annotationCloses,estimatedRevenue,estimatedAdRevenue,estimatedRedPartnerRevenue,grossRevenue,monetizedPlaybacks,playbackBasedCpm,adImpressions,cpm,cardClickRate,cardTeaserClickRate,cardImpressions,cardTeaserImpressions,cardClicks,cardTeaserClicks,averageTimeInPlaylist,viewsPerPlaylistStart,playlistStarts,playlistEndActions,playlistViews,playlistTopPlaylistEntry,playlistTopPlaylistExit,uniqueCookies,averageViewPercentage,redViews,redWatchTime,impressions,impressionsClickThroughRate,viewsFromImpressions,watchTimeFromImpressions,likesGained,likesLost,dislikesGained,dislikesLost,cardIconClicks,cardIconImpressions,endScreenElementClicks,endScreenElementImpressions,endScreenElementClickRate,endScreenElementTeaserClicks,endScreenElementTeaserImpressions,endScreenElementTeaserClickRate",
+            "dimension_string"      : "video,day",
+            "filter_column"         : "video",
+            "pickle_files_list"     : [],
+            "token_files_list"      : [],
+            "target_brands_list"    : [],
+            "channel_names_list"    : []
+        }
+    },
+    "YoutubeCommentsExtractor" : {
+        "constructor" : {
+            "service_name" : "youtube",
+            "api_ver"      : "v3"
+        },
+        "comment_extraction_settings_method" : {
+            "output_path" : "./data/{}",
+            "videos_list" : []
+        }
+    }
+}
