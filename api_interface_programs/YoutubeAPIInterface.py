@@ -20,7 +20,7 @@ class YoutubeAPIInterface:
         self.channel_names  = channel_names 
         self.channel_ids    = channel_ids 
         self.channel_uids   = [f"UU{channel_id[2:]}" for channel_id in channel_ids]
-        self.youtube_api    = build(self.service_name, self.api_version, developerKey = "AIzaSyDx-5HlTjstptydqqyuyq5oeJLLurd7gh8")
+        self.youtube_api    = build(self.service_name, self.api_version, developerKey = "")
 
         self.output_data_dictionary = {
             "brand_name"     : [], "channel_name"      : [],
