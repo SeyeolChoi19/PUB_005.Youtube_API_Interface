@@ -6,12 +6,31 @@ import pandas   as pd
 from googleapiclient.discovery import build 
 
 class YoutubeAPIInterface:
+    """
+        YouTube Data API v3를 사용하여 특정 채널의 비디오 및 구독자 정보를 수집하고 저장하는 기능을 제공함. 
+        이 클래스는 지정된 기간 내의 비디오 ID를 가져오고, 해당 비디오의 통계 정보를 수집하며, 채널의 구독자 
+        수를 기록함. 수집된 데이터는 엑셀 파일로 저장됨.
+    """
     def __init__(self, service_name: str = "youtube", api_ver = "v3"):
+        """
+            service_name : 사용할 서비스 이름. 기본값은 "youtube"입니다.
+            api_ver      : 사용할 API 버전. 기본값은 "v3"입니다.
+            current_date : 현재 날짜를 문자열 형식으로 저장합니다.
+        """
         self.service_name = service_name
         self.api_version  = api_ver 
         self.current_date = str(dt.datetime.now().date())
 
     def youtube_api_settings_method(self, output_path: str, earliest_date: str, latest_date: str, max_results: int, brand_names: list[str], channel_names: list[str], channel_ids: list[str]):
+        """
+            output_path   : 결과를 저장할 경로
+            earliest_date : 데이터 시작 일자
+            latest_date   : 데이터 종료 일자
+            max_results   : 한 번의 API 호출로 가져올 최대 결과 수
+            brand_names   : 브랜드 이름 리스트
+            channel_names : 채널 이름 리스트
+            channel_ids   : 채널 ID 리스트 (채널 youtube 페이지 소스 코드 (Ctrl + U, Ctrl + F로 "UC" 검색) 조회하여 확인 가능 )
+        """
         self.output_path    = output_path.format(self.current_date)
         self.earliest_date  = earliest_date 
         self.latest_date    = latest_date
@@ -20,7 +39,7 @@ class YoutubeAPIInterface:
         self.channel_names  = channel_names 
         self.channel_ids    = channel_ids 
         self.channel_uids   = [f"UU{channel_id[2:]}" for channel_id in channel_ids]
-        self.youtube_api    = build(self.service_name, self.api_version, developerKey = "")
+        self.youtube_api    = build(self.service_name, self.api_version, developerKey = "AIzaSyDx-5HlTjstptydqqyuyq5oeJLLurd7gh8")
 
         self.output_data_dictionary = {
             "brand_name"     : [], "channel_name"      : [],
@@ -39,7 +58,11 @@ class YoutubeAPIInterface:
         }
     
     def get_video_ids(self):
-       def save_results(brand_name: str, channel_name: str, channel_id: str, response: build):
+        """
+            지정된 채널의 비디오 ID를 가져와 저장함. 비디오의 업로드 날짜가 지정된 기간 내에 있는지 확인하고, 
+            해당 비디오의 정보를 저장함.
+        """
+        def save_results(brand_name: str, channel_name: str, channel_id: str, response: build):
             for index in range(len(response["items"])):
                 upload_date = response["items"][index]["snippet"]["publishedAt"][0:10]
             
@@ -67,6 +90,9 @@ class YoutubeAPIInterface:
                     break
 
     def get_video_stats(self):
+        """
+            get_video_ids()로 뽑은 데이터로 영상 ID에 해당되는 지표값 추출 
+        """        
         for video_id in self.output_data_dictionary["video_ids"]:
             response    = self.youtube_api.videos().list(id = video_id, part = "statistics").execute()
             likes       = int(response["items"][0]["statistics"].get("likeCount", 0))
@@ -80,6 +106,9 @@ class YoutubeAPIInterface:
                 self.output_data_dictionary[key].append(value)
 
     def get_subscriber_count(self):
+        """
+            get_video_ids()로 뽑은 데이터로 영상 ID에 구독자수 추출  
+        """        
         for (brand_name, channel_name, channel_id) in zip(self.brand_names, self.channel_names, self.channel_ids):
             response_object  = youtube_interface.youtube_api.channels().list(id = channel_id, part = "statistics").execute()
             subscriber_count = int(response_object["items"][0]["statistics"]["subscriberCount"])
@@ -89,6 +118,9 @@ class YoutubeAPIInterface:
                 self.subscriber_count[key].append(value)      
 
     def save_youtube_data(self):
+        """
+            self.output_path로 지정된 경로에 데이터를 저장을 위한 함수 
+        """
         os.makedirs(self.output_path, exist_ok = True)
         file_names = [f"{self.current_date} Youtube Data V3 API Data.xlsx", f"{self.current_date} Youtube Data V3 API Subscriber Count.xlsx"]
 
